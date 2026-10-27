@@ -2,7 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1117">
   <title>PADRÃO - Edição Multiverso com Áudio</title>
   <style>
     :root {
@@ -974,6 +975,67 @@
     .net-input { width: 100%; background: var(--bg-cell); color: var(--text-main); border: 1px solid var(--border-p1);
       border-radius: 8px; padding: 10px; font-size: 1.2rem; font-weight: 800; letter-spacing: 6px; text-align: center; text-transform: uppercase; }
     .net-code { font-size: 2.6rem; font-weight: 900; letter-spacing: 10px; color: var(--gold); text-shadow: 0 0 12px var(--gold); }
+
+    /* ===== RESPONSIVO: PC, tablet e celular ===== */
+    html { -webkit-text-size-adjust: 100%; overscroll-behavior: none; }
+    body { min-height: 100vh; min-height: 100dvh; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+    .screen {
+      width: 100%; height: 100vh; height: 100dvh; box-sizing: border-box;
+      justify-content: flex-start; overflow-x: hidden; overflow-y: auto;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+    .screen > * { margin-top: auto; margin-bottom: auto; }   /* centraliza, mas rola quando falta altura */
+    .battle-menu-container { width: 100%; height: auto; min-height: 100%; }
+    .menu-box { max-width: 94vw; padding: clamp(16px, 4vw, 30px); box-sizing: border-box; }
+    .modal { padding: clamp(16px, 4vw, 30px); max-height: 92dvh; }
+    .theme-grid { max-height: min(250px, 40dvh); }
+
+    .board {
+      --cell: clamp(18px, min(calc((100vw - 60px) / 15), calc((100dvh - 270px) / 15)), 46px);
+      grid-template-columns: repeat(15, var(--cell)); grid-template-rows: repeat(15, var(--cell));
+    }
+    .cell { width: var(--cell); height: var(--cell); font-size: calc(var(--cell) * 0.58); }
+    .pattern-grid { grid-template-columns: repeat(3, var(--pc, 26px)); grid-template-rows: repeat(3, var(--pc, 26px)); }
+    .pattern-cell { width: var(--pc, 26px); height: var(--pc, 26px); font-size: calc(var(--pc, 26px) * 0.5); }
+
+    @media (hover: none) { .cell:hover { filter: none; } }
+    @media (pointer: coarse) { button { min-height: 44px; } }
+
+    /* Celular em pé e telas estreitas */
+    @media (max-width: 900px) {
+      .game-container { flex-direction: column; align-items: center; flex-wrap: nowrap; gap: 8px; padding: 46px 8px 12px; width: 100%; box-sizing: border-box; }
+      .right-block { order: -1; width: 100%; max-width: 560px; flex-direction: row; gap: 6px; }
+      .right-block .card { flex: 1 1 0; min-width: 0; padding: 8px 6px; text-align: center; }
+      .card h3 { font-size: 0.6rem; letter-spacing: 0.3px; margin-bottom: 6px; }
+      .pattern-grid { --pc: 20px; gap: 2px; }
+      .score-item { font-size: 0.7rem; flex-direction: column; gap: 0; }
+      .turn-indicator { font-size: 0.95rem; padding: 6px 12px; }
+      .board { --cell: clamp(18px, min(calc((100vw - 60px) / 15), calc((100dvh - 360px) / 15)), 46px); }
+      .left-block { width: 100%; }
+      .left-block > button { max-width: 560px; }
+    }
+    @media (max-width: 480px) {
+      .audio-mute-btn { top: 6px; right: 6px; padding: 5px 10px; font-size: 0.72rem; }
+      .battle-title-wrapper { margin-top: 24px; }
+      .net-code { font-size: 2rem; letter-spacing: 6px; }
+    }
+    @media (max-width: 340px) { .theme-grid { grid-template-columns: 1fr; } }
+
+    /* Celular deitado (pouca altura): tabuleiro ao lado dos cartões, com rolagem se precisar */
+    @media (max-height: 520px) and (orientation: landscape) {
+      .game-container { flex-direction: row; flex-wrap: nowrap; gap: 10px; padding: 4px 10px; align-items: center; justify-content: center; }
+      .board { --cell: clamp(17px, calc((100dvh - 142px) / 15), 32px); }
+      .turn-indicator { padding: 3px 10px; font-size: 0.85rem; }
+      .left-block > button { min-height: 32px; padding: 4px 10px; font-size: 0.8rem; }
+      .right-block { order: 0; flex-direction: column; width: 170px; max-width: 170px; gap: 6px; }
+      .left-block { width: auto; }
+      .right-block .card { padding: 6px 8px; }
+      .pattern-grid { --pc: 18px; }
+      .left-block { gap: 4px; }
+      .status-bar { display: none; }
+      .audio-mute-btn { top: 4px; right: 4px; padding: 4px 8px; font-size: 0.68rem; }
+      .battle-title { font-size: 2.4rem; }
+    }
   </style>
 </head>
 <body class="theme-default">
@@ -1076,7 +1138,7 @@
         <div class="options-group">
           <label>Entrar numa sala</label>
           <div style="display: flex; gap: 6px;">
-            <input id="net-code" class="net-input" maxlength="4" placeholder="CÓDIGO" autocomplete="off">
+            <input id="net-code" class="net-input" maxlength="5" placeholder="CÓDIGO" autocomplete="off" autocapitalize="characters" spellcheck="false">
             <button onclick="Net.joinFromInput()">Entrar</button>
           </div>
         </div>
@@ -2082,85 +2144,233 @@
         t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
     }
 
-    const Net = (() => {
-      let es = null, room = null, pid = null, slot = null, prevN = 0, saved = null, peerLeft = false;
-      const $ = id => document.getElementById(id);
-      const status = m => { $('net-status').textContent = m; };
-
-      async function api(path, body) {
-        const r = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) });
+    // ----- Transporte 1: servidor Node (rede local) -----
+    function makeServerT(cb) {
+      let es = null, room = null, pid = null;
+      const api = async (path, body) => {
+        const r = await fetch('api/' + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) });
         const j = await r.json().catch(() => ({}));
         if (!r.ok) throw new Error(j.error || 'Falha de conexão com o servidor');
         return j;
+      };
+      const open = j => {
+        room = j.room; pid = j.pid;
+        es = new EventSource(`api/events?room=${room}&pid=${pid}`);
+        es.addEventListener('peers', e => cb.peers(JSON.parse(e.data).n));
+        es.addEventListener('start', e => cb.start(JSON.parse(e.data)));
+        es.addEventListener('move', e => cb.move(JSON.parse(e.data)));
+        es.onerror = () => { if (es && es.readyState === 2) cb.error('Conexão com o servidor perdida.'); };
+        return { room: j.room, slot: j.slot };
+      };
+      return {
+        create: async () => open(await api('create')),
+        join: async code => open(await api('join', { room: code })),
+        send: async m => m.t === 'start' ? api('start', { room, pid, config: m.config }) : api('move', { room, pid, r: m.r, c: m.c }),
+        close() { if (es) es.close(); es = null; }
+      };
+    }
+
+    // ----- Transporte 2: P2P (WebRTC via PeerJS) — não precisa de servidor, funciona no GitHub Pages -----
+    // O anfitrião (P1) faz o papel do servidor: valida turnos e repassa as jogadas.
+    function makeP2PT(Peer, cb) {
+      const PREFIX = 'padrao-jogo-v1-';
+      let peer = null, conn = null, isHost = false;
+      const g = { turn: 'P1', occ: new Set(), inGame: false, moves: 0 };
+      const reset = () => { g.turn = 'P1'; g.occ.clear(); g.inGame = false; g.moves = 0; };
+      const toGuest = m => { if (conn && conn.open) conn.send(m); };
+      const delay = fn => setTimeout(fn, 0);
+
+      function hostApply(from, m) {            // devolve texto de erro, ou undefined se aceitou
+        if (m.t === 'start') {
+          if (!(conn && conn.open)) return 'Aguardando o oponente.';
+          if (g.inGame && g.moves === 0) return;
+          reset(); g.inGame = true; cb.start(m.config); toGuest({ t: 'start', config: m.config }); return;
+        }
+        if (m.t === 'move') {
+          const r = m.r | 0, c = m.c | 0, k = r * 15 + c;
+          if (!g.inGame || from !== g.turn) return 'Não é a sua vez.';
+          if (r < 0 || r > 14 || c < 0 || c > 14 || g.occ.has(k)) return 'Jogada inválida.';
+          g.occ.add(k); g.moves++; g.turn = g.turn === 'P1' ? 'P2' : 'P1';
+          const out = { t: 'move', r, c, slot: from };
+          cb.move(out); toGuest(out);
+        }
       }
+      const waitOpen = p => new Promise((ok, bad) => {
+        p.on('open', ok); p.on('error', bad);
+        setTimeout(() => bad({ type: 'timeout' }), 15000);
+      });
+      const newCode = () => { const A = 'ABCDEFGHJKMNPQRSTUVWXYZ'; return Array.from({ length: 5 }, () => A[Math.floor(Math.random() * A.length)]).join(''); };
+
+      return {
+        async create() {
+          for (let i = 0; i < 6; i++) {
+            const code = newCode();
+            peer = new Peer(PREFIX + code);
+            try { await waitOpen(peer); } catch (e) {
+              try { peer.destroy(); } catch (x) {}
+              if (e && e.type === 'unavailable-id') continue;
+              throw new Error('Não foi possível conectar ao serviço online. Verifique sua internet.');
+            }
+            isHost = true;
+            peer.on('connection', c => {
+              if (conn && conn.open) { c.on('open', () => { c.send({ t: 'full' }); setTimeout(() => c.close(), 300); }); return; }
+              conn = c;
+              c.on('open', () => { reset(); cb.peers(2); c.send({ t: 'peers', n: 2 }); });
+              c.on('data', m => { const err = hostApply('P2', m); if (err) c.send({ t: 'err', msg: err }); });
+              c.on('close', () => { if (conn === c) { conn = null; reset(); cb.peers(1); } });
+              c.on('error', () => {});
+            });
+            peer.on('error', () => {});
+            delay(() => cb.peers(1));
+            return { room: code, slot: 'P1' };
+          }
+          throw new Error('Não foi possível criar a sala. Tente novamente.');
+        },
+        async join(code) {
+          code = String(code).toUpperCase().trim();
+          peer = new Peer();
+          try { await waitOpen(peer); } catch (e) { throw new Error('Não foi possível conectar ao serviço online. Verifique sua internet.'); }
+          await new Promise((ok, bad) => {
+            conn = peer.connect(PREFIX + code, { reliable: true });
+            const t = setTimeout(() => bad(new Error('Sala não encontrada ou sem resposta. Confira o código.')), 15000);
+            peer.on('error', e => { clearTimeout(t); bad(new Error(e && e.type === 'peer-unavailable' ? 'Sala não encontrada. Confira o código.' : 'Falha de conexão com o oponente.')); });
+            conn.on('open', () => { clearTimeout(t); ok(); });
+          });
+          conn.on('data', m => {
+            if (m.t === 'start') cb.start(m.config);
+            else if (m.t === 'move') cb.move(m);
+            else if (m.t === 'peers') cb.peers(m.n);
+            else if (m.t === 'full') cb.error('Sala cheia.');
+            else if (m.t === 'err') cb.notice(m.msg);
+          });
+          conn.on('close', () => cb.peers(1));
+          delay(() => cb.peers(2));
+          return { room: code, slot: 'P2' };
+        },
+        async send(m) {
+          if (isHost) { const err = hostApply('P1', m); if (err) throw new Error(err); return; }
+          if (!conn || !conn.open) throw new Error('Sem conexão com o anfitrião.');
+          conn.send(m);
+        },
+        close() { try { if (conn) conn.close(); if (peer) peer.destroy(); } catch (e) {} conn = peer = null; isHost = false; reset(); }
+      };
+    }
+
+    function loadPeerJS() {
+      return new Promise((ok, bad) => {
+        if (window.Peer) return ok(window.Peer);
+        const urls = ['https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js', 'https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js'];
+        let i = 0;
+        const next = () => {
+          if (i >= urls.length) return bad(new Error('Não foi possível carregar o módulo online. Verifique sua internet.'));
+          const sc = document.createElement('script');
+          sc.src = urls[i++]; sc.onload = () => window.Peer ? ok(window.Peer) : next(); sc.onerror = next;
+          document.head.appendChild(sc);
+        };
+        next();
+      });
+    }
+
+    const Net = (() => {
+      let T = null, kind = null, room = null, slot = null, prevN = 0, saved = null, peerLeft = false;
+      const $ = id => document.getElementById(id);
+      const status = m => { $('net-status').textContent = m; };
+
+      const cb = {
+        peers: n => onPeers(n),
+        start: cfg => {
+          if (!saved) saved = { key: currentTheme, rand: isRandomTheme };
+          peerLeft = false; gameMode = 'online';
+          launchGame(cfg);
+        },
+        move: m => { if (!isGameOver) makeMove(m.r, m.c); },
+        error: msg => { status(msg); showToast('⚠️ ' + msg); peerLeft = true; },
+        notice: msg => showToast(msg)
+      };
+
+      // Servidor Node presente (LAN)? Senão usa P2P (GitHub Pages ou arquivo aberto direto)
+      async function probe() {
+        if (kind) return kind;
+        kind = 'p2p';
+        if (location.protocol !== 'file:') {
+          try {
+            const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 2500);
+            const r = await fetch('api/ping', { signal: ctl.signal, cache: 'no-store' });
+            clearTimeout(t);
+            const j = await r.json();
+            if (r.ok && j.ok) kind = 'server';
+          } catch (e) {}
+        }
+        return kind;
+      }
+      async function makeT() { return (await probe()) === 'server' ? makeServerT(cb) : makeP2PT(await loadPeerJS(), cb); }
+
       function buildConfig() {
         const keys = Object.keys(themesData).filter(k => unlockedAllSecret || aiWins >= themesData[k].winsRequired);
         const theme = (isRandomTheme || currentTheme === 'random') ? keys[Math.floor(Math.random() * keys.length)] : currentTheme;
         const size = Math.floor(Math.random() * 2) + 4;
         return { theme, p1: generatePattern(size), p2: generatePattern(size), seed: Math.floor(Math.random() * 2147483647) };
       }
-      function connect() {
-        es = new EventSource(`/api/events?room=${room}&pid=${pid}`);
-        es.addEventListener('peers', e => {
-          const n = JSON.parse(e.data).n;
-          const started = $('game-screen').classList.contains('active');
-          if (n < 2) {
-            if (started) { peerLeft = true; showToast('⚠️ O oponente saiu da sala.'); document.getElementById('status-bar').innerText = 'O oponente saiu. Volte ao menu.'; }
-            else status('Aguardando o oponente entrar na sala...');
-          } else {
-            peerLeft = false;
-            status('Oponente conectado! Iniciando...');
-            if (slot === 'P1' && prevN < 2) api('/api/start', { room, pid, config: buildConfig() }).catch(err => status(err.message));
-          }
-          prevN = n;
-        });
-        es.addEventListener('start', e => {
-          const cfg = JSON.parse(e.data);
-          if (!saved) saved = { key: currentTheme, rand: isRandomTheme };
-          peerLeft = false; gameMode = 'online';
-          launchGame(cfg);
-        });
-        es.addEventListener('move', e => { const m = JSON.parse(e.data); if (!isGameOver) makeMove(m.r, m.c); });
-        es.onerror = () => { if (es && es.readyState === 2) { status('Conexão com o servidor perdida.'); peerLeft = true; } };
+      function onPeers(n) {
+        const started = $('game-screen').classList.contains('active');
+        if (n < 2) {
+          if (started) { peerLeft = true; showToast('⚠️ O oponente saiu da sala.'); $('status-bar').innerText = 'O oponente saiu. Volte ao menu.'; }
+          else status('Aguardando o oponente entrar na sala...');
+        } else {
+          peerLeft = false;
+          status('Oponente conectado! Iniciando...');
+          if (slot === 'P1' && prevN < 2) T.send({ t: 'start', config: buildConfig() }).catch(err => status(err.message));
+        }
+        prevN = n;
       }
       function enterRoom(j) {
-        room = j.room; pid = j.pid; slot = j.slot; prevN = 0; peerLeft = false;
+        room = j.room; slot = j.slot; prevN = 0; peerLeft = false;
         $('net-lobby').style.display = 'none'; $('net-room').style.display = 'flex';
         $('net-room-code').textContent = room;
-        $('net-link').textContent = `${location.origin}/?sala=${room}`;
-        connect();
+        $('net-link').textContent = location.protocol === 'file:' ? '' : `${location.href.split(/[?#]/)[0]}?sala=${room}`;
       }
       return {
         get slot() { return slot; }, get peerLeft() { return peerLeft; },
-        async create() { try { status('Criando sala...'); enterRoom(await api('/api/create')); status('Sala criada! Passe o código ou o link ao seu oponente.'); } catch (e) { status(e.message); } },
-        async join(code) { try { status('Entrando...'); enterRoom(await api('/api/join', { room: String(code).toUpperCase().trim() })); } catch (e) { status(e.message); } },
-        joinFromInput() { const c = $('net-code').value.trim(); if (c.length === 4) this.join(c); else status('Digite o código de 4 letras.'); },
-        copyLink() { const t = $('net-link').textContent; (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => showToast('📋 Link copiado!')).catch(() => showToast(t)); },
-        sendMove(r, c) { api('/api/move', { room, pid, r, c }).catch(e => showToast(e.message)); },
-        rematch() { if (peerLeft) { showToast('O oponente saiu da sala.'); return; } api('/api/start', { room, pid, config: buildConfig() }).catch(e => showToast(e.message)); },
+        async create() {
+          try { status('Criando sala...'); T = await makeT(); enterRoom(await T.create()); status('Sala criada! Passe o código ou o link ao seu oponente.'); }
+          catch (e) { status(e.message); if (T) { T.close(); T = null; } }
+        },
+        async join(code) {
+          try { status('Entrando na sala...'); T = await makeT(); enterRoom(await T.join(code)); }
+          catch (e) { status(e.message); if (T) { T.close(); T = null; } }
+        },
+        joinFromInput() { const c = $('net-code').value.trim(); if (c.length >= 4) this.join(c); else status('Digite o código da sala.'); },
+        copyLink() {
+          const t = $('net-link').textContent || room;
+          (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => showToast('📋 Copiado!')).catch(() => showToast(t));
+        },
+        sendMove(r, c) { if (T) T.send({ t: 'move', r, c }).catch(e => showToast(e.message)); },
+        rematch() {
+          if (peerLeft || !T) { showToast('O oponente saiu da sala.'); return; }
+          T.send({ t: 'start', config: buildConfig() }).catch(e => showToast(e.message));
+        },
         leave() {
-          if (es) es.close(); es = null; room = pid = slot = null; prevN = 0; peerLeft = false;
+          if (T) T.close(); T = null; room = slot = null; prevN = 0; peerLeft = false;
           if (saved) { currentTheme = saved.key; isRandomTheme = saved.rand; saved = null;
             document.body.className = isRandomTheme ? 'theme-default' : `theme-${currentTheme}`; updateMenuPreviewSymbols(); }
           gameMode = '2p'; selectMode('2p');
           $('net-lobby').style.display = 'flex'; $('net-room').style.display = 'none';
           status('Crie uma sala ou entre com o código do seu oponente.');
         },
-        back() { this.leave(); document.getElementById('online-screen').classList.remove('active'); document.getElementById('setup-screen').classList.add('active'); }
+        back() { this.leave(); $('online-screen').classList.remove('active'); $('setup-screen').classList.add('active'); }
       };
     })();
 
     function openOnline() {
       document.getElementById('setup-screen').classList.remove('active');
       document.getElementById('online-screen').classList.add('active');
-      if (location.protocol === 'file:') document.getElementById('net-status').textContent = '⚠️ Para jogar online, abra o jogo pelo servidor (veja o LEIAME).';
     }
 
     selectMode('2p');
     selectDifficulty('medium');
     setTheme('default');
     { const sala = new URLSearchParams(location.search).get('sala');   // link de convite
-      if (sala && location.protocol !== 'file:') { document.getElementById('menu-screen').classList.remove('active'); openOnline(); Net.join(sala); } }
+      if (sala) { document.getElementById('menu-screen').classList.remove('active'); openOnline(); Net.join(sala); } }
     
     window.addEventListener('click', () => {
       if (document.getElementById('menu-screen').classList.contains('active')) {

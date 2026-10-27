@@ -1,25 +1,33 @@
-PADRÃO ONLINE — como jogar
+PADRÃO — como publicar e jogar online
 
-PRECISA DE: Node.js (gratuito, nodejs.org). Não precisa instalar mais nada.
+O arquivo index.html é o jogo completo (funciona em PC, tablet e celular).
+O modo Online tem DUAS formas de funcionar, e o jogo escolhe sozinho:
 
-1) Deixe estes arquivos juntos na mesma pasta: index.html e server.js
-2) Inicie o servidor:
-     Windows:    dê dois cliques em iniciar-servidor.bat
-     Mac/Linux:  ./iniciar-servidor.sh     (ou:  node server.js)
-3) O terminal mostra os endereços, por exemplo:
-     Neste computador:  http://localhost:8000
-     Na rede (LAN):     http://192.168.0.15:8000
-4) Abra o endereço da rede no navegador dos DOIS jogadores
-   (mesmo Wi-Fi/rede). Quem abrir primeiro também pode ser o anfitrião.
-5) Jogo > 🌐 Online:
-     Jogador 1: "Criar sala" e passa o código de 4 letras (ou o link de convite).
-     Jogador 2: digita o código e toca em "Entrar".
-   A partida começa sozinha. O ambiente visual é o escolhido pelo anfitrião.
+═══ A) GITHUB PAGES (internet, sem servidor) ═══  <- recomendado
+  1. Crie uma conta em github.com (grátis) e clique em  New repository.
+     Dê um nome (ex.: padrao), deixe Public e crie.
+  2. Clique em "uploading an existing file", arraste SÓ o index.html e
+     clique em "Commit changes".
+  3. Vá em Settings > Pages. Em "Build and deployment", escolha
+     Source: Deploy from a branch | Branch: main | pasta: / (root) | Save.
+  4. Em 1 a 2 minutos o jogo fica em:
+        https://SEU-USUARIO.github.io/padrao/
+  5. Abra esse link no PC ou no celular. Jogo > Online:
+        Jogador 1: "Criar sala" e manda o código de 5 letras (ou "Copiar link").
+        Jogador 2: abre o link de convite, ou digita o código e toca em "Entrar".
+  Funciona entre redes diferentes (casa, 4G, outra cidade).
+  Como funciona: conexão direta entre os dois jogadores (WebRTC), usando o
+  serviço gratuito de encontro do PeerJS. Precisa de internet nos dois.
+  Obs.: em redes muito restritas (alguns Wi-Fi de empresa/escola e certas
+  operadoras 4G) a conexão direta pode ser bloqueada. Troque de rede/Wi-Fi.
 
-Se os outros aparelhos não conseguirem abrir o endereço: libere o Node.js
-no Firewall do Windows (ele pergunta na primeira vez) ou a porta 8000.
-Para mudar a porta:  PORT=3000 node server.js   (Windows: set PORT=3000 && node server.js)
+═══ B) REDE LOCAL (LAN), sem internet ═══
+  Precisa do Node.js (nodejs.org). Deixe index.html e server.js na mesma pasta.
+     Windows:    dois cliques em iniciar-servidor.bat
+     Mac/Linux:  ./iniciar-servidor.sh   (ou:  node server.js)
+  O terminal mostra o endereço da rede (ex.: http://192.168.0.15:8000).
+  Abra no navegador dos dois jogadores (mesmo Wi-Fi) e use Jogo > Online.
+  Se não abrir nos outros aparelhos, libere o Node.js no Firewall do Windows.
 
-PUBLICAR NA INTERNET: hospede este servidor em qualquer serviço que rode Node.js
-(Render, Railway, Fly.io...). Comando de início: node server.js
-O jogo contra IA e para 2 jogadores no mesmo aparelho funciona abrindo só o index.html.
+Contra a IA e 2 jogadores no mesmo aparelho funcionam em qualquer forma,
+inclusive abrindo o index.html direto, sem internet.

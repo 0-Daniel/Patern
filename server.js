@@ -66,6 +66,7 @@ http.createServer(async (req, res) => {
     const [code, obj] = await routes[url.pathname](await readBody(req));
     return json(res, code, obj);
   }
+  if (req.method === 'GET' && url.pathname === '/api/ping') return json(res, 200, { ok: true });
   if (req.method === 'GET' && url.pathname === '/api/events') {
     const { room, player } = find({ room: url.searchParams.get('room'), pid: url.searchParams.get('pid') });
     if (!player) { res.writeHead(404); return res.end(); }

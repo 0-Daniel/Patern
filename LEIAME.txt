@@ -1,0 +1,25 @@
+PADRÃO ONLINE — como jogar
+
+PRECISA DE: Node.js (gratuito, nodejs.org). Não precisa instalar mais nada.
+
+1) Deixe estes arquivos juntos na mesma pasta: index.html e server.js
+2) Inicie o servidor:
+     Windows:    dê dois cliques em iniciar-servidor.bat
+     Mac/Linux:  ./iniciar-servidor.sh     (ou:  node server.js)
+3) O terminal mostra os endereços, por exemplo:
+     Neste computador:  http://localhost:8000
+     Na rede (LAN):     http://192.168.0.15:8000
+4) Abra o endereço da rede no navegador dos DOIS jogadores
+   (mesmo Wi-Fi/rede). Quem abrir primeiro também pode ser o anfitrião.
+5) Jogo > 🌐 Online:
+     Jogador 1: "Criar sala" e passa o código de 4 letras (ou o link de convite).
+     Jogador 2: digita o código e toca em "Entrar".
+   A partida começa sozinha. O ambiente visual é o escolhido pelo anfitrião.
+
+Se os outros aparelhos não conseguirem abrir o endereço: libere o Node.js
+no Firewall do Windows (ele pergunta na primeira vez) ou a porta 8000.
+Para mudar a porta:  PORT=3000 node server.js   (Windows: set PORT=3000 && node server.js)
+
+PUBLICAR NA INTERNET: hospede este servidor em qualquer serviço que rode Node.js
+(Render, Railway, Fly.io...). Comando de início: node server.js
+O jogo contra IA e para 2 jogadores no mesmo aparelho funciona abrindo só o index.html.
